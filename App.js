@@ -9,11 +9,18 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
+const now = Math.floor(Date.now() / 1000);
+
+const last24 = now - "86400";
+console.log( last24 ); // This gives us our 24hr timestamp UTC seconds
+
+
 const DAI_QUERY = gql`
   query tokens($tokenAddress: Bytes!) {
     tokens(where: { id: $tokenAddress }) {
       derivedETH
       totalLiquidity
+      txCount
     }
   }
 `
@@ -26,6 +33,27 @@ const ETH_PRICE_QUERY = gql`
   }
 `
 
+const HOT_VOLUMES = gql`
+ query pairs {
+  pairs(where: {volumeUSD_gt: "100000", createdAtTimestamp_gt: "1625377982" }) {
+
+  id
+    token0 {
+      id
+      symbol
+    }
+    token1 {
+      id
+      symbol
+    }
+
+    id
+    reserveUSD
+    volumeUSD
+  }
+}
+`
+
 function Prices() {
   const { loading: ethLoading, data: ethPriceData } = useQuery(ETH_PRICE_QUERY)
   const { loading: daiLoading, data: daiData } = useQuery(DAI_QUERY, {
@@ -36,6 +64,7 @@ function Prices() {
 
   const daiPriceInEth = daiData && daiData.tokens[0].derivedETH
   const daiTotalLiquidity = daiData && daiData.tokens[0].totalLiquidity
+  const daiTxCount = daiData && daiData.tokens[0].txCount
   const ethPriceInUSD = ethPriceData && ethPriceData.bundles[0].ethPrice
 
   return (
@@ -47,19 +76,44 @@ function Prices() {
             // parse responses as floats and fix to 2 decimals
             (parseFloat(daiPriceInEth) * parseFloat(ethPriceInUSD)).toFixed(2)} <Text/>
 	<Text/> 
-        Dai total liquidity:{' '}
+         Dai total liquidity:{' '}
         {daiLoading
           ? 'Loading token data...'
           : // display the total amount of DAI spread across all pools
             parseFloat(daiTotalLiquidity).toFixed(0)} <Text/>
+
+	Dai total transactions:{' '}
+        {daiLoading
+          ? 'Loading token data...'
+          : // display the total amount of DAI spread across all pools
+            parseFloat(daiTxCount).toFixed(0)} <Text/>
 	  </Text>
-  )
+
+ )
+}
+
+function Volumes() {
+
+  const { loading: hotLoading, data: hotData } = useQuery(HOT_VOLUMES)
+  const hotVolume = hotData && hotData.pairs[0].token0.id //this gives us index 0 of token 0s id, which will be the tokens contract address instead of the pair addres or anything else. if we use index 1 we will get the other half of the LP pairs contract (usually wrapped eth)
+
+  return (
+      <Text>
+        Hot Token:{' '}
+        {hotLoading 
+	  ? 'Loading token data...'
+          :
+            // parse responses as floats and fix to 2 decimals
+          hotVolume} <Text/>
+	</Text>
+ )
 }
 
 const App = () => (
   <ApolloProvider client={client}>
    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-     <Prices /> 
+     <Prices />
+     <Volumes />
     </View>
   </ApolloProvider>
 );
