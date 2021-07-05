@@ -39,23 +39,20 @@ function Prices() {
   const ethPriceInUSD = ethPriceData && ethPriceData.bundles[0].ethPrice
 
   return (
-    <div>
-      <div>
+      <Text>
         Dai price:{' '}
         {ethLoading || daiLoading
           ? 'Loading token data...'
           : '$' +
             // parse responses as floats and fix to 2 decimals
-            (parseFloat(daiPriceInEth) * parseFloat(ethPriceInUSD)).toFixed(2)}
-      </div>
-      <div>
+            (parseFloat(daiPriceInEth) * parseFloat(ethPriceInUSD)).toFixed(2)} <Text/>
+	<Text/> 
         Dai total liquidity:{' '}
         {daiLoading
           ? 'Loading token data...'
           : // display the total amount of DAI spread across all pools
-            parseFloat(daiTotalLiquidity).toFixed(0)}
-      </div>
-    </div>
+            parseFloat(daiTotalLiquidity).toFixed(0)} <Text/>
+	  </Text>
   )
 }
 
