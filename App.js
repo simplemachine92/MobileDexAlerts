@@ -1,18 +1,13 @@
-import React from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { AppRegistry } from 'react-native';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { HttpLink } from 'apollo-link-http';
-import { Text, View } from 'react-native';
+import { Text, Button, View } from 'react-native';
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
   cache: new InMemoryCache()
 });
-
-const now = Math.floor(Date.now() / 1000);
-
-const last24 = now - "86400";
-//console.log( last24 ); // This gives us our 24hr timestamp UTC seconds
 
 const DAI_QUERY = gql`
   query tokens($tokenAddress: Bytes!) {
@@ -34,7 +29,7 @@ const ETH_PRICE_QUERY = gql`
 
 const HOT_VOLUMES = gql`
  query pairs($blockTime: BigInt!) {
-  pairs(where: {createdAtTimestamp_gt: $blockTime, volumeUSD_gt: "10000" }) {
+  pairs(where: {createdAtTimestamp_gt: $blockTime, volumeUSD_gt: "10000", reserveUSD_gt: "10000" }) {
 
     token0 {
       id
@@ -51,6 +46,36 @@ const HOT_VOLUMES = gql`
   }
 }
 `
+
+class SimpleNotification extends Component {
+  constructor() {
+    super();
+    this.showNotification = this.showNotification.bind(this);
+  }
+
+  componentDidMount() {
+    if (!("Notification" in window)) {
+      console.log("This browser does not support desktop notification");
+    } else {
+      Notification.requestPermission();
+    }
+  }
+
+  showNotification() {
+    new Notification('Hey')
+  }
+
+  render() {
+    return (
+	    <Button
+  onPress={this.showNotification}
+  title="Notify me"
+  color="#841584"
+/>
+         );
+  }
+}
+
 
 function Prices() {
   const { loading: ethLoading, data: ethPriceData } = useQuery(ETH_PRICE_QUERY)
@@ -90,38 +115,38 @@ function Prices() {
  )
 }
 
-function Volumes() {
+function Volumes(i) {
 
 const now = Math.floor(Date.now() / 1000);
 
 const last24 = now - "86400";
-//console.log( last24 ); // This gives us our 24hr timestamp UTC seconds
 
-console.log(last24) //just making sure our time check is working here, too, might not be necessary.
-
-  const { loading: hotLoading, data: hotData } = useQuery(HOT_VOLUMES, {
+  const { loading: hotLoading, error, data: hotData } = useQuery(HOT_VOLUMES, {
 	  variables: {
-		  blockTime: last24
-    }
-  })
+		  blockTime: last24},
+	          pollInterval: 500,
+  });
 
-  const hotVolume = hotData && hotData.pairs[4].token0.id //this gives us index 0 of token 0s id, which will be the tokens contract address instead of the pair addres or anything else. if we use index 1 we will get the other half of the LP pairs contract (usually wrapped eth)
+if (hotLoading) return 'Loading...';
+  if (error) return `Error! ${error.message}`;
 
-  return (
-      <Text>
-        Hot Token:{' '}
-        {hotLoading 
-	  ? 'Loading token data...'
-          :
-            // parse responses as floats and fix to 2 decimals
-          hotVolume} <Text/>
-	</Text>
- )
+const hotVolumes = hotData.pairs[0]?.token0.id
+
+let VolumeList = [hotVolumes]
+
+	console.log(hotVolumes)
+
+return (
+    <ol> 
+        <li>{VolumeList}</li>
+    </ol>
+  );
 }
 
-const App = () => (
+ const App = () => (
   <ApolloProvider client={client}>
-   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}> 
+     <SimpleNotification />
      <Prices />
      <Volumes />
     </View>
