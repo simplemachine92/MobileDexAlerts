@@ -3,6 +3,7 @@ import { AppRegistry } from 'react-native';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { HttpLink } from 'apollo-link-http';
 import { Text, Button, View } from 'react-native';
+var _ = require('lodash');
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -124,22 +125,60 @@ const last24 = now - "86400";
   const { loading: hotLoading, error, data: hotData } = useQuery(HOT_VOLUMES, {
 	  variables: {
 		  blockTime: last24},
-	          pollInterval: 500,
+	          pollInterval: 5000,
   });
 
 if (hotLoading) return 'Loading...';
   if (error) return `Error! ${error.message}`;
 
-const hotVolumes = hotData.pairs[0]?.token0.id
+var hotVolumes = hotData.pairs
 
-let VolumeList = [hotVolumes]
+//let VolumeList = [hotVolumes]
 
-	console.log(hotVolumes)
+//	hotVolumes.filter(function(a){return a !== ;}); 
+
+
+var filteredVolumes = hotVolumes.filter(element => element.token0.id !== '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+console.log(filteredVolumes)
+
+var newArray = [];
+
+filteredVolumes.map(element => newArray.push(element.token0.id))
+	console.log(newArray)
+
+const listItems = newArray.map((newArray) =>
+	<li>{newArray}</li>
+);
+
+//	return newArray.map(function (newestVolume))
+
+//arr.forEach(function(item) {
+//    newArray.push(item + 21);
+//});
+
+//	console.log(hotVolumes.element.token0.id)
+
+//console.log(y.element.token0.id)
+	//	return _.omit(obj, '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+//	return y.omit(element.token0.id, '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+
+//console.log(_.map(hotVolumes, function (hotVolumes) {
+//  return _.omit(pairs.element.token0.id, '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+//}));
+
+//console.log(_.map(y, _.partial(_.omit, _, '0x68c525a7574509659ba27c38a1e4e5550f6711c4')))
+
+//const removeWETH = hotVolumes.filter(element.token0.id !== 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2);
+
+//	console.log(VolumeList)
+//	console.log(Object.values(hotData.pairs{0}.id))
 
 return (
-    <ol> 
-        <li>{VolumeList}</li>
-    </ol>
+
+        <ul>
+	{listItems}
+	</ul>
+
   );
 }
 
