@@ -120,7 +120,7 @@ function Volumes(i) {
 
 const now = Math.floor(Date.now() / 1000);
 
-const last24 = now - "86400";
+const last24 = now - "46400";
 
   const { loading: hotLoading, error, data: hotData } = useQuery(HOT_VOLUMES, {
 	  variables: {
@@ -147,7 +147,7 @@ filteredVolumes.map(element => newArray.push(element.token0.id))
 	console.log(newArray)
 
 const listItems = newArray.map((newArray) =>
-	<li>{newArray}</li>
+	<li key={newArray.toString()}> {newArray} </li>
 );
 
 //	return newArray.map(function (newestVolume))
@@ -175,9 +175,9 @@ const listItems = newArray.map((newArray) =>
 
 return (
 
-        <ul>
+        <ol>
 	{listItems}
-	</ul>
+	</ol>
 
   );
 }
