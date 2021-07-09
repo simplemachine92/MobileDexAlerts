@@ -120,12 +120,12 @@ function Volumes(i) {
 
 const now = Math.floor(Date.now() / 1000);
 
-const last24 = now - "46400";
+const last24 = now - "26600";
 
   const { loading: hotLoading, error, data: hotData } = useQuery(HOT_VOLUMES, {
 	  variables: {
 		  blockTime: last24},
-	          pollInterval: 50000,
+	          pollInterval: 500,
   });
 
 if (hotLoading) return 'Loading...';
@@ -133,13 +133,19 @@ if (hotLoading) return 'Loading...';
 
 var hotVolumes = hotData.pairs
 
+console.log(hotVolumes)
+
 var filteredVolumes = hotVolumes.filter(element => element.token0.id !== '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+console.log(filteredVolumes)
+
+var filteredVolumes2 = hotVolumes.filter(element => element.token1.id !== '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
 console.log(filteredVolumes)
 
 var newArray = [];
 
 filteredVolumes.map(element => newArray.push(element.token0.id))
-	console.log(newArray)
+
+filteredVolumes2.map(element => newArray.push(element.token1.id))
 
 const listItems = newArray.map((newArray) =>
 	<li key={newArray.toString()}> {newArray} </li>
