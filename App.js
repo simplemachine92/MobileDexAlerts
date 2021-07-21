@@ -2,8 +2,10 @@ import React, { Component, useState, useEffect } from 'react';
 import { AppRegistry } from 'react-native';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { HttpLink } from 'apollo-link-http';
-import { Text, Button, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { Text, Button, View, FlatList, StyleSheet, SafeAreaView, Pressable, Linking } from 'react-native';
 import { Chart, registerables } from 'chart.js';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -30,7 +32,7 @@ const HOT_VOLUMES = gql`
 }
 `
 
-function Volumes() {
+function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
@@ -80,18 +82,43 @@ const listItems = newArray.map((newArray) =>
 	<Text key={newArray.toString()}>{newArray}</Text>
 );
 
+//const [timesPressed, setTimesPressed] = useState(0);
+console.log(listItems)
 return (
 	<SafeAreaView style={styles.container}>
 	<FlatList
 	data={listItems}
-	renderItem={({item}) => <Text style={styles.item}>{`${item.key}`}</Text>}/>
+	renderItem={({item}) => <Text style={styles.container}
+	onPress={() => {
+              navigation.push('Details', { 
+// this doesnt work for shit figure out how to pass data to the navigation		      itemId:{{ item.key }} 
+	      });
+            }}
+	>{`${item.key}`}</Text>}/>
 	</SafeAreaView>
   );
 }
 
+function DetailsScreen({route, navigation}) {
+const { itemId, otherParam } = route.params;
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>itemId: {JSON.stringify(item.key)}</Text>
+    </View>
+  );
+}
+
+const Stack = createStackNavigator();
+
 const App = () => (
 <ApolloProvider client={client}>
-<Volumes />
+<NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+		{props => <HomeScreen {...props} extraData={someData} />}
+	<Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
 </ApolloProvider>
 );
 
