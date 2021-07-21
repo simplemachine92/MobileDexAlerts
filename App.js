@@ -2,31 +2,13 @@ import React, { Component, useState, useEffect } from 'react';
 import { AppRegistry } from 'react-native';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { HttpLink } from 'apollo-link-http';
-import { Text, Button, View } from 'react-native';
-var _ = require('lodash');
+import { Text, Button, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { Chart, registerables } from 'chart.js';
 
 const client = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
   cache: new InMemoryCache()
 });
-
-const DAI_QUERY = gql`
-  query tokens($tokenAddress: Bytes!) {
-    tokens(where: { id: $tokenAddress }) {
-      derivedETH
-      totalLiquidity
-      txCount
-    }
-  }
-`
-
-const ETH_PRICE_QUERY = gql`
-  query bundles {
-    bundles(where: { id: "1" }) {
-      ethPrice
-    }
-  }
-`
 
 const HOT_VOLUMES = gql`
  query pairs($blockTime: BigInt!) {
@@ -48,88 +30,33 @@ const HOT_VOLUMES = gql`
 }
 `
 
-class SimpleNotification extends Component {
-  constructor() {
-    super();
-    this.showNotification = this.showNotification.bind(this);
-  }
+function Volumes() {
 
-  componentDidMount() {
-    if (!("Notification" in window)) {
-      console.log("This browser does not support desktop notification");
-    } else {
-      Notification.requestPermission();
-    }
-  }
-
-  showNotification() {
-    new Notification('Hey')
-  }
-
-  render() {
-    return (
-	    <Button
-  onPress={this.showNotification}
-  title="Notify me"
-  color="#841584"
-/>
-         );
-  }
-}
-
-
-function Prices() {
-  const { loading: ethLoading, data: ethPriceData } = useQuery(ETH_PRICE_QUERY)
-  const { loading: daiLoading, data: daiData } = useQuery(DAI_QUERY, {
-    variables: {
-      tokenAddress: '0x6b175474e89094c44da98b954eedeac495271d0f'
-    }
-  })
-
-  const daiPriceInEth = daiData && daiData.tokens[0].derivedETH
-  const daiTotalLiquidity = daiData && daiData.tokens[0].totalLiquidity
-  const daiTxCount = daiData && daiData.tokens[0].txCount
-  const ethPriceInUSD = ethPriceData && ethPriceData.bundles[0].ethPrice
-
-  return (
-      <Text>
-        Dai price:{' '}
-        {ethLoading || daiLoading
-          ? 'Loading token data...'
-          : '$' +
-            // parse responses as floats and fix to 2 decimals
-            (parseFloat(daiPriceInEth) * parseFloat(ethPriceInUSD)).toFixed(2)} <Text/>
-	<Text/> 
-         Dai total liquidity:{' '}
-        {daiLoading
-          ? 'Loading token data...'
-          : // display the total amount of DAI spread across all pools
-            parseFloat(daiTotalLiquidity).toFixed(0)} <Text/>
-
-	Dai total transactions:{' '}
-        {daiLoading
-          ? 'Loading token data...'
-          : // display the total amount of DAI spread across all pools
-            parseFloat(daiTxCount).toFixed(0)} <Text/>
-	  </Text>
-
- )
-}
-
-function Volumes(i) {
+const styles = StyleSheet.create({
+  container: {
+   flex: 1,
+   paddingTop: 12,
+   padding: 20
+  },
+  item: {
+    padding: 20,
+    fontSize: 12,
+    height: 44,
+  },
+});
 
 const now = Math.floor(Date.now() / 1000);
 
-const last24 = now - "26600";
+const last24 = now - "86600";
 
   const { loading: hotLoading, error, data: hotData } = useQuery(HOT_VOLUMES, {
 	  variables: {
 		  blockTime: last24},
-	          pollInterval: 500,
+	          pollInterval: 150000,
   });
 
-if (hotLoading) return 'Loading...';
-  if (error) return `Error! ${error.message}`;
+if (hotLoading) return <SafeAreaView style={styles.container}><Text style ={styles.container}>Loading...</Text></SafeAreaView>;
+  if (error) return <SafeAreaView style={styles.container}><Text> Error! ${error.message}</Text></SafeAreaView>;
 
 var hotVolumes = hotData.pairs
 
@@ -144,30 +71,28 @@ console.log(filteredVolumes)
 var newArray = [];
 
 filteredVolumes.map(element => newArray.push(element.token0.id))
+console.log(filteredVolumes)
 
 filteredVolumes2.map(element => newArray.push(element.token1.id))
+console.log(filteredVolumes2)
 
 const listItems = newArray.map((newArray) =>
-	<li key={newArray.toString()}> {newArray} </li>
+	<Text key={newArray.toString()}>{newArray}</Text>
 );
 
 return (
-
-        <ol>
-	{listItems}
-	</ol>
-
+	<SafeAreaView style={styles.container}>
+	<FlatList
+	data={listItems}
+	renderItem={({item}) => <Text style={styles.item}>{`${item.key}`}</Text>}/>
+	</SafeAreaView>
   );
 }
 
- const App = () => (
-  <ApolloProvider client={client}>
-   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}> 
-     <SimpleNotification />
-     <Prices />
-     <Volumes />
-    </View>
-  </ApolloProvider>
+const App = () => (
+<ApolloProvider client={client}>
+<Volumes />
+</ApolloProvider>
 );
 
 AppRegistry.registerComponent('MyApplication', () => App);
