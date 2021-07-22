@@ -90,8 +90,7 @@ return (
 	data={listItems}
 	renderItem={({item}) => <Text style={styles.container}
 	onPress={() => {
-              navigation.push('Details', { 
-// this doesnt work for shit figure out how to pass data to the navigation		      itemId:{{ item.key }} 
+              navigation.navigate('Details', {coinID: (item)
 	      });
             }}
 	>{`${item.key}`}</Text>}/>
@@ -100,10 +99,10 @@ return (
 }
 
 function DetailsScreen({route, navigation}) {
-const { itemId, otherParam } = route.params;
+const { coinID, otherParam } = route.params;
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>itemId: {JSON.stringify(item.key)}</Text>
+      <Text>{coinID}</Text>
     </View>
   );
 }
