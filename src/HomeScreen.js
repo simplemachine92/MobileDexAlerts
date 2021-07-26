@@ -2,6 +2,7 @@ import React from 'react';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import { Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { styles } from './Styles';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const client = new ApolloClient({
     uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -75,7 +76,7 @@ export default function HomeScreen({ navigation }) {
       data={listItems}	
       renderItem={({item}) => <Text style={styles.item}
       onPress={() => {
-                navigation.push('Details', {coinID: (item)
+                navigation.navigate('Details', {coinID: (item)
             });
               }}
       >{`${item.key}`}</Text>}/>

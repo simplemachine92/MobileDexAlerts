@@ -6,9 +6,10 @@ export const styles = StyleSheet.create({
      flex: 1,
      paddingTop: 12,
      padding: 20,
-     backgroundColor: '#808080'
+     backgroundColor: '#FFFFFF'
     },
     item: {
+        flex: 1,
       padding: 20,
       fontSize: 12,
       height: 44,
@@ -18,6 +19,7 @@ export const styles = StyleSheet.create({
         display: 'flex',
       padding: 10,
       fontSize: 24,
+      textAlign: 'center',
   backgroundColor: '#FFFFFF',
         justifyContent: 'center',
         alignItems: 'center'

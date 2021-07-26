@@ -38,20 +38,20 @@ export default function DetailsScreen({route, navigation}) {
       }
     );
     
-    if (coinLoading) return <View><Text style ={styles.container}>Loading...</Text></View>;
-      if (error) return <View><Text> Error! ${error.message}</Text></View>;
+    if (coinLoading) return <SafeAreaView><Text style ={styles.container}>Loading...</Text></SafeAreaView>;
+      if (error) return <SafeAreaView><Text> Error! ${error.message}</Text></SafeAreaView>;
     
     console.log(coinData.tokenDayDatas[0].priceUSD)
     console.log(coinData.tokenDayDatas[0].token.name)
     
       return (
-        <View style={styles.item}>
-          <Text>
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.item}>
         {coinData.tokenDayDatas[0].token.name}{"\n"}{"\n"}
          ${coinData.tokenDayDatas[0].priceUSD}
           {"\n"}{"\n"}
           {coinData.tokenDayDatas[0].totalLiquidityUSD}
           </Text>
-        </View>
+        </SafeAreaView>
       );
     }
