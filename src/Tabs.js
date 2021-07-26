@@ -5,11 +5,13 @@ import DetailsScreen from './Details';
 
 const Tab = createBottomTabNavigator();
 
-export default function MyTabs() {
+export default function MyTabs({route}) {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Dashboard" component={HomeScreen} />
-      <Tab.Screen name="Coins" component={DetailsScreen} />
-    </Tab.Navigator>
+      <NavigationContainer>
+          <Stack.Screen>
+          <Text>Im gay!</Text>
+          </Stack.Screen>
+      </NavigationContainer>
+      
   );
 }

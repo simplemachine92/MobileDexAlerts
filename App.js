@@ -19,8 +19,8 @@ const Stack = createStackNavigator();
 const App = () => (
 <ApolloProvider client={client}>
 <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Dashboard" component={HomeScreen}
+      <Stack.Navigator>
+        <Stack.Screen name="Dashboard" component={HomeScreen}
 	options={{
           title: 'Cryptoes',
           headerStyle: {
@@ -30,8 +30,8 @@ const App = () => (
             fontWeight: 'bold',
           }}}/>
 		{props => <HomeScreen {...props} coinID={item} />}
-	<Tab.Screen name="Details" component={DetailsScreen} />
-      </Tab.Navigator>
+	<Stack.Screen name="Details" component={DetailsScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
 </ApolloProvider>
 );

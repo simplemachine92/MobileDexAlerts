@@ -3,6 +3,10 @@ import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apol
 import { Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { styles } from './Styles';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MyTabs from './Tabs';
+
+const Tab = createBottomTabNavigator();
 
 const client = new ApolloClient({
     uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -39,6 +43,8 @@ export default function HomeScreen({ navigation }) {
         variables: {
             blockTime: last24},
                 pollInterval: 150000,
+                fetchPolicy: 'network-only',
+              notifyOnNetworkStatusChange: 'true'
     });
   
   if (hotLoading) return <SafeAreaView style={styles.container}><Text style ={styles.container}>Loading...</Text></SafeAreaView>;
@@ -73,13 +79,14 @@ export default function HomeScreen({ navigation }) {
       <SafeAreaView style ={styles.container}>
       <Text style ={styles.title}>New Hot Tokens</Text>
       <FlatList
-      data={listItems}	
-      renderItem={({item}) => <Text style={styles.item}
+      data= {listItems}	
+      keyExtractor={(item, index) => item.key.toString()}
+      renderItem={ (data) => <Text style={styles.item}
       onPress={() => {
-                navigation.navigate('Details', {coinID: (item)
+                navigation.navigate('Details', {coinID: (data.item.key)
             });
               }}
-      >{`${item.key}`}</Text>}/>
+      >{`${data.item.key}`}</Text>}/>
       </SafeAreaView>
     );
   }

@@ -23,24 +23,24 @@ query tokenDayDatas($coinForQuery: ID!) {
 }
 `
 
-export default function DetailsScreen({route, navigation}) {
+export default function DetailsScreen({ route }) {
 
-    const { coinID, otherParam } = route.params;
+    const { coinID } = route.params;
     
     console.log(coinID.key)
     
     const { loading: coinLoading, error, data: coinData } = useQuery(COIN_INFO, {
               variables: {
-                      coinForQuery: coinID.key},
+                      coinForQuery: coinID},
                       pollInterval: 15000,
-              fetchPolicy: 'network-only',
+              fetchPolicy: "cache-and-network",
               notifyOnNetworkStatusChange: true
       }
     );
     
     if (coinLoading) return <SafeAreaView><Text style ={styles.container}>Loading...</Text></SafeAreaView>;
       if (error) return <SafeAreaView><Text> Error! ${error.message}</Text></SafeAreaView>;
-    
+
     console.log(coinData.tokenDayDatas[0].priceUSD)
     console.log(coinData.tokenDayDatas[0].token.name)
     
