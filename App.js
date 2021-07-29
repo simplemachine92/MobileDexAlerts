@@ -3,9 +3,10 @@ import { AppRegistry } from 'react-native';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import DetailsScreen from './src/Details';
 import HomeScreen from './src/HomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import SignUp from './src/Signin';
+import DetailsScreen from './src/Details';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,8 +20,8 @@ const Stack = createStackNavigator();
 const App = () => (
 <ApolloProvider client={client}>
 <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Dashboard" component={HomeScreen}
+      <Tab.Navigator>
+        <Tab.Screen name="Dashboard" component={HomeScreen}
 	options={{
           title: 'Cryptoes',
           headerStyle: {
@@ -30,8 +31,9 @@ const App = () => (
             fontWeight: 'bold',
           }}}/>
 		{props => <HomeScreen {...props} coinID={item} />}
-	<Stack.Screen name="Details" component={DetailsScreen} />
-      </Stack.Navigator>
+    <Tab.Screen name="Account" component={SignUp}/>
+    <Tab.Screen name='DetailsScreen' component={DetailsScreen}/>
+      </Tab.Navigator>
     </NavigationContainer>
 </ApolloProvider>
 );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import { Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { styles } from './Styles';
@@ -70,7 +70,7 @@ export default function HomeScreen({ navigation }) {
   const listItems = newArray.map((newArray) =>
       <Text key={newArray.toString()}>{newArray}</Text>
   );
-  
+
   console.log(listItems)
   console.log(newArray)
   
@@ -82,7 +82,7 @@ export default function HomeScreen({ navigation }) {
       keyExtractor={(item, index) => item.key.toString()}
       renderItem={ (data) => <Text style={styles.item}
       onPress={() => {
-                navigation.navigate('DetailsScreen', {coinID: (data.item.key)
+                navigation.navigate('Details', {coinID: (data.item.key)
             });
               }}
       >{`${data.item.key}`}</Text>}/>
