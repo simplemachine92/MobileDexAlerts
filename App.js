@@ -5,8 +5,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './src/HomeScreen';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import SignUp from './src/Signin';
+import SignUp from './src/Register';
 import DetailsScreen from './src/Details';
+import SignIn from './src/Signin';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,8 +21,10 @@ const Stack = createStackNavigator();
 const App = () => (
 <ApolloProvider client={client}>
 <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Dashboard" component={HomeScreen}
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={SignIn}/>
+        <Stack.Screen name="Register" component={SignUp}/>
+        <Stack.Screen name="Dashboard" component={HomeScreen}
 	options={{
           title: 'Cryptoes',
           headerStyle: {
@@ -31,9 +34,8 @@ const App = () => (
             fontWeight: 'bold',
           }}}/>
 		{props => <HomeScreen {...props} coinID={item} />}
-    <Tab.Screen name="Account" component={SignUp}/>
-    <Tab.Screen name='DetailsScreen' component={DetailsScreen}/>
-      </Tab.Navigator>
+    <Stack.Screen name='DetailsScreen' component={DetailsScreen}/>
+      </Stack.Navigator>
     </NavigationContainer>
 </ApolloProvider>
 );

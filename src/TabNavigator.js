@@ -8,9 +8,9 @@ const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Stack.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
-    </Tab.Navigator>
+    </Stack.Navigator>
   );
 };
 

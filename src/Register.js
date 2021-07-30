@@ -18,25 +18,20 @@ if (!firebase.apps.length) {
 firebase.initializeApp(firebaseConfig);
 }
 
-export default class SignIn extends React.Component {
+export default class SignUp extends React.Component {
   state = { email: "", password: "", errorMessage: null };
 
-  handleSignIn = () => {
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-  .then((userCredential) => {
-    // Signed in
-    var user = userCredential.user;
-    console.log(user)
-    this.props.navigation.navigate("Dashboard")
-  })
-  .catch((error) =>
-    this.setState({ errorMessage: error.message }));
-  }
-
+  handleSignUp = () => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => this.props.navigation.navigate("Dashboard"))
+      .catch(error => this.setState({ errorMessage: error.message }));
+  };
   render() {
     return (
       <View style={styles.container}>
-        <Text>Login</Text>
+        <Text>Sign Up</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
@@ -55,11 +50,7 @@ export default class SignIn extends React.Component {
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Login" onPress={this.handleSignIn} />
-        <Button
-          title="Don't have an account? Register!"
-          onPress={() => this.props.navigation.navigate('Register')}
-        />
+        <Button title="Sign Up" onPress={this.handleSignUp} />
       </View>
     );
   }
