@@ -21,12 +21,16 @@ firebase.initializeApp(firebaseConfig);
 export default class SignIn extends React.Component {
   state = { email: "", password: "", errorMessage: null };
 
+  componentDidMount() {
+  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  }
+
   handleSignIn = () => {
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
   .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
-    console.log(user)
+    console.log(user.uid)
     this.props.navigation.navigate("Dashboard")
   })
   .catch((error) =>
