@@ -1,4 +1,5 @@
 import React from 'react';
+import { AuthProvider } from './src/AuthProvider';
 import { AppRegistry } from 'react-native';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import { NavigationContainer } from '@react-navigation/native';
@@ -25,6 +26,7 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
 firebase.initializeApp(firebaseConfig);
 }
+
 
 
 const Tab = createBottomTabNavigator();

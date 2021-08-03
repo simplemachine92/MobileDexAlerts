@@ -18,15 +18,52 @@ if (!firebase.apps.length) {
 firebase.initializeApp(firebaseConfig);
 }
 
-export default class SignIn extends React.Component {
-  state = { email: "", password: "", errorMessage: null };
+export class IsSignedIn extends React.Component {
 
-  componentDidMount() {
-  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  constructor(props) {
+    super(props)
+  
+    this.state = {
+       isLoggedIn: ''
+    }
   }
 
+  componentWillMount(){
+    this.signedIn();
+ }
+
+  signedIn = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        var uid = user.uid;
+        this.setState({isLoggedIn: (uid) })
+        console.log(uid);
+      } else {
+        this.setState({isLoggedIn: null })
+        console.log('no user')
+      }
+    });
+  }
+  
+  render() {
+    return (
+      this.state.isLoggedIn ?
+      <Text> Welcome {this.state.isLoggedIn} </Text> :
+      <Text>Please log in! </Text>
+    )
+}
+}
+
+
+export default class SignIn extends React.Component {
+
+  state = { email: "", password: "", errorMessage: null };
+
   handleSignIn = () => {
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+    .then(() => {
+    return firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password);
+    })
   .then((userCredential) => {
     // Signed in
     var user = userCredential.user;
@@ -40,6 +77,7 @@ export default class SignIn extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <IsSignedIn />
         <Text>Login</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
