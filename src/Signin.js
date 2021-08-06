@@ -28,7 +28,7 @@ export class IsSignedIn extends React.Component {
     }
   }
 
-  componentWillMount(){
+  componentDidMount(){
     this.signedIn();
  }
 
