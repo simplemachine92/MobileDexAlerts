@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { IsSignedIn } from './Signin';
 import firebase from '@firebase/app'
 require('firebase/auth')
 
@@ -25,7 +26,7 @@ export default class SignUp extends React.Component {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate("Dashboard"))
+      //.then(() => this.props.navigation.navigate("Dashboard"))
       .catch(error => this.setState({ errorMessage: error.message }));
   };
   render() {

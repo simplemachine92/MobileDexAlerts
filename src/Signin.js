@@ -76,7 +76,7 @@ export default class SignIn extends React.Component {
     // Signed in
     var user = userCredential.user;
     console.log(user.uid)
-    this.props.navigation.navigate("Dashboard")
+    //this.props.navigation.navigate("Dashboard")
   })
   .catch((error) =>
     this.setState({ errorMessage: error.message }));
@@ -85,7 +85,6 @@ export default class SignIn extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <IsSignedIn />
         <Text>Login</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
@@ -108,7 +107,7 @@ export default class SignIn extends React.Component {
         <Button title="Login" onPress={this.handleSignIn} />
         <Button
           title="Don't have an account? Register!"
-          onPress={() => this.props.navigation.navigate('Register')}
+          onPress={() => this.props.navigation.navigate('Register', {screen: 'SignUp'})}
         />
       </View>
     );

@@ -105,7 +105,6 @@ export default function HomeScreen({ navigation }) {
   
   return (
       <SafeAreaView style ={styles.container}>
-        <IsSignedIn />
       <Text style ={styles.title}>New Hot Tokens</Text>
       <FlatList
       data= {listItems}	

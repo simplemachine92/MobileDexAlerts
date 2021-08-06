@@ -3,11 +3,9 @@ import { ActivityIndicator, SafeAreaView, StyleSheet,
     Text, TextInput, View, Button } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeScreen from "./HomeScreen";
-import DetailsScreen from "./Details";
-import SignIn from "./Signin";
+import Authed from "./Routes/Authed";
+import UnAuthed from "./Routes/UnAuthed";
 import { spinnerstyle } from "./spinnerstyle";
-import SignUp from "./Register";
 import firebase from '@firebase/app'
 require('firebase/auth')
 
@@ -45,7 +43,7 @@ export default class NewAuth extends React.Component {
       }
       return (
     <NavigationContainer>
-    {isLoggedIn ? <HomeScreen /> : <SignIn/>}
+    {isLoggedIn ? <Authed/> : <UnAuthed/>}
     </NavigationContainer>
     );
   }
