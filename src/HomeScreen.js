@@ -1,10 +1,11 @@
 import React from 'react';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
-import { Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { Button, ActivityIndicator, Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { styles } from './Styles';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { IsSignedIn } from './Signin';
+import { spinnerstyle } from './spinnerstyle';
 import firebase from '@firebase/app'
 require('firebase/auth')
 
@@ -64,7 +65,10 @@ export default function HomeScreen({ navigation }) {
               notifyOnNetworkStatusChange: 'true'
     });
   
-  if (hotLoading) return <SafeAreaView style={styles.container}><Text style ={styles.container}>Loading...</Text></SafeAreaView>;
+  if (hotLoading) return <View style=
+  {[spinnerstyle.container, spinnerstyle.horizontal]}>
+      <ActivityIndicator size="large" />
+      </View>;
     if (error) return <SafeAreaView style={styles.container}><Text> Error! ${error.message}</Text></SafeAreaView>;
   
   var hotVolumes = hotData.pairs
@@ -91,6 +95,13 @@ export default function HomeScreen({ navigation }) {
   
   console.log(listItems)
   console.log(newArray)
+
+  function handleSignOut() {
+    firebase.auth().signOut().then(() => {
+      // Sign-out successful.
+    }).catch((error) => {
+      // An error happened.
+    })};
   
   return (
       <SafeAreaView style ={styles.container}>
@@ -105,6 +116,7 @@ export default function HomeScreen({ navigation }) {
             });
               }}
       >{`${data.item.key}`}</Text>}/>
+      <Button title="Logout, Bitch." onPress={handleSignOut} />
       </SafeAreaView>
     );
   }

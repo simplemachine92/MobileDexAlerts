@@ -29,7 +29,15 @@ export class IsSignedIn extends React.Component {
   }
 
   componentDidMount(){
-    this.signedIn();
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        var uid = user.uid;
+        this.setState({isLoggedIn: (uid) })
+      } else {
+        this.setState({isLoggedIn: null })
+        console.log('no user')
+      }
+    });
  }
 
   signedIn = () => {

@@ -1,11 +1,12 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet, 
+    Text, TextInput, View, Button } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { styles } from './Styles';
 import HomeScreen from "./HomeScreen";
 import DetailsScreen from "./Details";
 import SignIn from "./Signin";
+import { spinnerstyle } from "./spinnerstyle";
 import SignUp from "./Register";
 import firebase from '@firebase/app'
 require('firebase/auth')
@@ -27,7 +28,6 @@ export default class NewAuth extends React.Component {
           if (user) {
             var uid = user.uid;
             this.setState({isLoggedIn: true })
-            console.log(uid);
           } else {
             this.setState({isLoggedIn: false })
             console.log('no user')
@@ -38,8 +38,10 @@ export default class NewAuth extends React.Component {
   render() {
       const {isLoggedIn} = this.state;
       if (isLoggedIn == null) {
-          return <SafeAreaView style={styles.container}>
-              <Text style ={styles.container}>Loading...</Text></SafeAreaView>;
+          return <View style=
+          {[spinnerstyle.container, spinnerstyle.horizontal]}>
+              <ActivityIndicator size="large" />
+              </View>;
       }
       return (
     <NavigationContainer>
