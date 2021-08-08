@@ -21,15 +21,23 @@ firebase.initializeApp(firebaseConfig);
 }
 
 export default class SignUp extends React.Component {
-  state = { email: "", password: "", errorMessage: null };
+  state = { email: "", password: "", cpassword: "", errorMessage: null };
+
+  confirmPassword = () => {
+
+  } 
+
 
   handleSignUp = () => {
+    if(this.state.password !== this.state.cpassword){
+      return this.setState({errorMessage: 'Passwords did not match'})
+    } else {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       //.then(() => this.props.navigation.navigate("Dashboard"))
       .catch(error => this.setState({ errorMessage: error.message }));
-  };
+    }};
   render() {
     return (
       <View style={AuthStyles.container}>
@@ -51,6 +59,14 @@ export default class SignUp extends React.Component {
           style={AuthStyles.textInput}
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
+        />
+        <TextInput
+          secureTextEntry
+          placeholder="Confirm Password"
+          autoCapitalize="none"
+          style={AuthStyles.textInput}
+          onChangeText={cpassword => this.setState({ cpassword })}
+          value={this.state.cpassword}
         />
         <View style={AuthStyles.buttonContainer}>
         <TouchableOpacity

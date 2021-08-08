@@ -2,9 +2,7 @@ import React from 'react';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
 import { Button, ActivityIndicator, Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { styles } from './Styles';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { IsSignedIn } from './Signin';
 import { spinnerstyle } from './spinnerstyle';
 import firebase from '@firebase/app'
 require('firebase/auth')
