@@ -22,8 +22,6 @@ if (!firebase.apps.length) {
 firebase.initializeApp(firebaseConfig);
 }
 
-
-
 const Tab = createBottomTabNavigator();
 
 const client = new ApolloClient({

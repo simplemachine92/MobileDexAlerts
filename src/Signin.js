@@ -68,6 +68,19 @@ export default class SignIn extends React.Component {
 
   state = { email: "", password: "", errorMessage: null };
 
+  resetPassword = () => {
+    firebase.auth().sendPasswordResetEmail(this.state.email)
+  .then(() => {
+    return this.setState({errorMessage: 'Reset Email Sent'})
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ..
+  });
+
+  }
+
   handleSignIn = () => {
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     .then(() => {
@@ -121,6 +134,12 @@ export default class SignIn extends React.Component {
       >
         <Text style={AuthStyles.buttonTextStyle}>Register</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        //style={AuthStyles.button}
+        onPress={this.resetPassword}
+      >
+        <Text style={AuthStyles.buttonTextStyle}>Reset Password</Text>
+      </TouchableOpacity>
         </View>
       </View>
       
@@ -129,26 +148,3 @@ export default class SignIn extends React.Component {
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  buttonStyle: {
-    flex: 0.2,
-    flexDirection: "row",
-    textAlign: "center",
-    justifyContent: "center"
-  },
-  textInput: {
-    height: 35,
-    width: "80%",
-    borderColor: "gray",
-    textAlign: "center",
-    borderRadius: 10,
-    borderWidth: 1,
-    marginTop: 10,
-    marginBottom: 10
-  }
-});

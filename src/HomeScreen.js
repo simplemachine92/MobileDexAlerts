@@ -80,16 +80,35 @@ export default function HomeScreen({ navigation }) {
   console.log(filteredVolumes)
   
   var newArray = [];
+
+  var newSymbols = [];
   
   filteredVolumes.map(element => newArray.push(element.token0.id))
-  console.log(filteredVolumes)
+  console.log(newArray)
   
   filteredVolumes2.map(element => newArray.push(element.token1.id))
-  console.log(filteredVolumes2)
+  console.log(newArray)
+  console.log(newArray)
+
+  filteredVolumes.map(element => newSymbols.push(element.token0.symbol))
+  console.log(newSymbols)
   
-  const listItems = newArray.map((newArray) =>
-      <Text key={newArray.toString()}>{newArray}</Text>
+  filteredVolumes2.map(element => newSymbols.push(element.token1.symbol))
+  console.log(newSymbols)
+
+ // const listSymbols = newSymbols.map((newSymbols) =>
+  //<Text key={newSymbols.toString()}>{newSymbols}</Text>
+//);
+  const listItems = newSymbols.map((newSymbols, n) =>
+      <Text key={newSymbols.toString()}>{newArray[n]}</Text>
   );
+  console.log(listItems)
+
+  var result = hotVolumes.filter(element =>
+    element.token0.symbol !== null
+  )
+
+  console.log(result)
   
   console.log(listItems)
   console.log(newArray)
@@ -105,11 +124,11 @@ export default function HomeScreen({ navigation }) {
       <SafeAreaView style ={styles.container}>
       <Text style ={styles.title}>New Hot Tokens</Text>
       <FlatList
-      data= {listItems}	
+      data= {listItems}
       keyExtractor={(item, index) => item.key.toString()}
       renderItem={ (data) => <Text style={styles.item}
       onPress={() => {
-                navigation.navigate('DetailsScreen', {coinID: (data.item.key)
+                navigation.navigate('DetailsScreen', {coinID: (data.item.props.children)
             });
               }}
       >{`${data.item.key}`}</Text>}/>
