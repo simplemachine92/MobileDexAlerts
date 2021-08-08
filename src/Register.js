@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, TextInput, View, Button } from "react-native";
 import { IsSignedIn } from './Signin';
+import { AuthStyles } from "./AuthStyles";
 import firebase from '@firebase/app'
 require('firebase/auth')
 
@@ -31,15 +32,15 @@ export default class SignUp extends React.Component {
   };
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Sign Up</Text>
+      <View style={AuthStyles.container}>
+        <Text style={AuthStyles.header}>Sign Up</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
-          style={styles.textInput}
+          style={AuthStyles.textInput}
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
         />
@@ -47,11 +48,17 @@ export default class SignUp extends React.Component {
           secureTextEntry
           placeholder="Password"
           autoCapitalize="none"
-          style={styles.textInput}
+          style={AuthStyles.textInput}
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Sign Up" onPress={this.handleSignUp} />
+        <View style={AuthStyles.buttonContainer}>
+        <TouchableOpacity
+        //style={AuthStyles.button}
+        onPress={this.handleSignUp}>
+          <Text style={AuthStyles.buttonTextStyle}>Register</Text>
+        </TouchableOpacity>
+        </View>
       </View>
     );
   }

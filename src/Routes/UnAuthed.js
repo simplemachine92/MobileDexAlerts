@@ -8,7 +8,7 @@ const Stack = createStackNavigator();
 
 export default function UnAuthed() {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator headerMode="none">
             <Stack.Screen name='Login' component={SignIn}/>
             <Stack.Screen name='Register' component={SignUp}/>
     </Stack.Navigator>

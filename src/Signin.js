@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { AuthStyles } from "./AuthStyles";
 import firebase from '@firebase/app'
 require('firebase/auth')
 
@@ -84,15 +85,15 @@ export default class SignIn extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Login</Text>
+      <View style={AuthStyles.container}>
+        <Text style={AuthStyles.header}>Welcome!</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
         )}
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
-          style={styles.textInput}
+          style={AuthStyles.textInput}
           onChangeText={email => this.setState({ email })}
           value={this.state.email}
         />
@@ -100,16 +101,28 @@ export default class SignIn extends React.Component {
           secureTextEntry
           placeholder="Password"
           autoCapitalize="none"
-          style={styles.textInput}
+          style={AuthStyles.textInput}
           onChangeText={password => this.setState({ password })}
           value={this.state.password}
         />
-        <Button title="Login" onPress={this.handleSignIn} />
-        <Button
-          title="Don't have an account? Register!"
-          onPress={() => this.props.navigation.navigate('Register', {screen: 'SignUp'})}
-        />
+        <View style={AuthStyles.buttonContainer}>
+        <TouchableOpacity
+        //style={AuthStyles.button}
+        onPress={this.handleSignIn}
+      >
+        <Text style={AuthStyles.buttonTextStyle}>Login</Text>
+      </TouchableOpacity>
+        <TouchableOpacity
+        //style={AuthStyles.button}
+        onPress={() => this.props.navigation.navigate('Register', {screen: 'SignUp'})}
+      >
+        <Text style={AuthStyles.buttonTextStyle}>Register</Text>
+      </TouchableOpacity>
+        </View>
       </View>
+      
+
+      
     );
   }
 }
@@ -119,11 +132,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  buttonStyle: {
+    flex: 0.2,
+    flexDirection: "row",
+    textAlign: "center",
+    justifyContent: "center"
+  },
   textInput: {
-    height: 40,
-    width: "90%",
+    height: 35,
+    width: "80%",
     borderColor: "gray",
+    textAlign: "center",
+    borderRadius: 10,
     borderWidth: 1,
-    marginTop: 8
+    marginTop: 10,
+    marginBottom: 10
   }
 });
