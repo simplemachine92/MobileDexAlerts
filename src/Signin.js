@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { Image, TouchableOpacity, StyleSheet, Text, TextInput, View, Button } from "react-native";
 import { AuthStyles } from "./AuthStyles";
 import firebase from '@firebase/app'
 require('firebase/auth')
@@ -86,6 +86,9 @@ export default class SignIn extends React.Component {
   render() {
     return (
       <View style={AuthStyles.container}>
+        <Image source={require('../assets/placeholder.jpeg')} 
+        style={{ width: 100, height: 100, marginBottom: 20 }}
+        />
         <Text style={AuthStyles.header}>Welcome!</Text>
         {this.state.errorMessage && (
           <Text style={{ color: "red" }}>{this.state.errorMessage}</Text>
