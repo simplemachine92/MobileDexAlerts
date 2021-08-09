@@ -1,6 +1,6 @@
 import React from 'react';
 import { gql, useQuery, ApolloClient, InMemoryCache, ApolloProvider} from '@apollo/client';
-import { Button, ActivityIndicator, Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
+import { TouchableOpacity, Button, ActivityIndicator, Text, View, FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import { styles } from './Styles';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { spinnerstyle } from './spinnerstyle';
@@ -53,7 +53,7 @@ export default function HomeScreen({ navigation }) {
   
   const now = Math.floor(Date.now() / 1000);
   
-  const last24 = now - "86600";
+  const last24 = now - "166600";
   
     const { loading: hotLoading, error, data: hotData } = useQuery(HOT_VOLUMES, {
         variables: {
@@ -73,10 +73,16 @@ export default function HomeScreen({ navigation }) {
   
   console.log(hotVolumes)
   
-  var filteredVolumes = hotVolumes.filter(element => element.token0.id !== '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+  var filteredVolumes = hotVolumes.filter(element => element.token0.id 
+    !== '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' && element.token0.id 
+    !== '0x6b175474e89094c44da98b954eedeac495271d0f'
+  );
   console.log(filteredVolumes)
   
-  var filteredVolumes2 = hotVolumes.filter(element => element.token1.id !== '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+  var filteredVolumes2 = hotVolumes.filter(element => element.token1.id 
+    !== '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' && element.token1.id
+    !== '0x6b175474e89094c44da98b954eedeac495271d0f'
+    );
   console.log(filteredVolumes)
   
   var newArray = [];
@@ -122,10 +128,11 @@ export default function HomeScreen({ navigation }) {
   
   return (
       <SafeAreaView style ={styles.container}>
-      <Text style ={styles.title}>New Hot Tokens</Text>
+      <Text style ={styles.title}>48hr Hot Tokens (Uni)</Text>
       <FlatList
       data= {listItems}
-      keyExtractor={(item, index) => item.key.toString()}
+      style={{alignContent:'center', backgroundColor:'white', width:'90%', borderRadius:30,}}
+      keyExtractor={(item) => item.key.toString()}
       renderItem={ (data) => <Text style={styles.item}
       onPress={() => {
                 navigation.navigate('DetailsScreen', {coinID: (data.item.props.children)

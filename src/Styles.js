@@ -9,11 +9,19 @@ export const styles = StyleSheet.create({
      //backgroundColor: '#FFFFFF'
     },
     item: {
-        flex: 1,
-      padding: 20,
-      fontSize: 12,
-      height: 44,
-        //backgroundColor: '#FFFFFF'
+      flex: 1,
+      marginBottom: 0,
+      marginTop: 20,
+      marginLeft: 20,
+      marginRight: 20,
+      fontSize: 16,
+      padding:10,
+      borderWidth: 2,
+      borderColor: "gray",
+      borderRadius: 12,
+      backgroundColor: '#2BA7FA',
+      overflow: "hidden"
+      
     },
     title: {
         display: 'flex',
