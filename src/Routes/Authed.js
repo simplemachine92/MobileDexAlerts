@@ -2,11 +2,10 @@ import React from "react";
 import HomeScreen from "../HomeScreen";
 import DetailsScreen from "../Details";
 import { AppRegistry } from 'react-native';
-import { IconExample } from "../Icon";
+import { IconExample } from "../NotiButton";
+import { DrawerButton } from "../DrawerButton";
 import SignUp from "../Register";
-import { useNavigation } from '@react-navigation/native';
-import { Button, TouchableOpacity } from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
+import Notifier from "../Notifier";
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
@@ -17,9 +16,12 @@ export default function Authed() {
         <Stack.Navigator>
             <Stack.Screen name="Dashboard" component={HomeScreen}
 	options={{
-          title: 'Cryptoes',
+          title: '',
           headerRight: () => (
             <IconExample />
+          ),
+          headerLeft: () => (
+            <DrawerButton />
           ),
           headerStyle: {
             backgroundColor: '#FFFFFF',
@@ -29,7 +31,7 @@ export default function Authed() {
           }}}/>
 		{props => <HomeScreen {...props} coinID={item} />}
     <Stack.Screen name='DetailsScreen' component={DetailsScreen}/>
-    <Stack.Screen name='Register' component={SignUp}/> 
+    <Stack.Screen name='Notifier' component={Notifier}/> 
     </Stack.Navigator>
     )}
 
